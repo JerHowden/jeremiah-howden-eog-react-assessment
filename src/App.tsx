@@ -1,6 +1,7 @@
 import React from 'react'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Main from './components/Main'
 
@@ -21,6 +22,7 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
+    <ToastContainer />
     <Main />
   </ThemeProvider>
 )
