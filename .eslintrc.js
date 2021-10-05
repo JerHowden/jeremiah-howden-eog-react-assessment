@@ -37,5 +37,8 @@ module.exports = {
     'arrow-parens': [0, { requireForBlockBody: false }],
     'jsx-quotes': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'unix'],
+    'semi': 'off',
+    '@typescript-eslint/semi': 'off',
   },
 };
