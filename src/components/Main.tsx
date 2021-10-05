@@ -1,6 +1,7 @@
 import React from 'react';
 // import Typography from '@mui/material/Typography'
-import getMetrics from '../Features/Metrics/getMetrics'
+import getMetrics from '../Features/Metrics/getMetricsLive'
+import SelectMetric from './SelectMetric'
 
 export default () => {
   const metrics = getMetrics()
@@ -9,6 +10,7 @@ export default () => {
   return (
     <div>
       <div />
+      <SelectMetric />
     </div>
   );
 };

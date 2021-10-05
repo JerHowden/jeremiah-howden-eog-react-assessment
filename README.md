@@ -9,6 +9,7 @@
 - [x] completed getMetrics function (*graphql subscription to live metrics data*)
 - [x] connected apollo to a websocket for subscriptions
 - [x] upgraded material-ui to mui
+- [x] select metrics component
 - [ ] toast on websocket disconnect or error
 - [ ] store subscription data in redux
 - [ ] store selected metrics in redux

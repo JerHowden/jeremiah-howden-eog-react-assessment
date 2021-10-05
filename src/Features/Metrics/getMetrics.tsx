@@ -1,36 +1,24 @@
 import {
-  useSubscription,
   gql,
+  useQuery,
 } from '@apollo/client'
 
 const subscription = gql`
-  subscription GetMetrics {
-    newMeasurement {
-      metric
-      value
-      at
-      unit
-    }
+  query GetMetrics {
+    getMetrics
   }
 `
 
-type Metric = {
-  metric: string,
-  value: number,
-  at: number,
-  unit: string,
-}
-
-type NewMeasurement = {
-  newMeasurement: Metric,
+type Metrics = {
+  getMetrics: string[]
 }
 
 type MetricData = {
-  data: NewMeasurement,
+  data: Metrics,
   loading: boolean,
 }
 
 export default function getMetrics(): MetricData {
-  const { data, loading } = useSubscription(subscription)
+  const { data, loading } = useQuery(subscription)
   return { data, loading }
 }

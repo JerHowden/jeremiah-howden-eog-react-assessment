@@ -1,31 +1,76 @@
 import React, { useState } from 'react'
-// eslint-disable-next-line object-curly-newline
-import { Box, InputLabel, MenuItem, FormControl, Select } from '@mui/material'
+import { Theme, useTheme } from '@mui/material/styles'
+import {
+  Box, OutlinedInput, InputLabel, MenuItem, FormControl, Select, Chip, CircularProgress,
+} from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
+import getMetrics from '../Features/Metrics/getMetrics'
 
-export default function BasicSelect() {
-  const [age, setAge] = useState('')
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+}
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string)
+function getStyles(name: string, personName: readonly string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+export default function SelectMetric() {
+  const theme = useTheme()
+  const [selectedMetrics, setSelectedMetrics] = useState<string[]>([])
+  const { data, loading } = getMetrics()
+
+  const handleChange = (event: SelectChangeEvent<typeof selectedMetrics>) => {
+    const {
+      target: { value },
+    } = event
+    setSelectedMetrics(
+      typeof value === 'string' ? value.split(',') : value,
+    )
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+      <FormControl sx={{ m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={selectedMetrics}
           onChange={handleChange}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={() => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selectedMetrics.map(value => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {loading ? <CircularProgress /> : data.getMetrics.map((metric) => (
+            <MenuItem
+              key={metric}
+              value={metric}
+              style={getStyles(metric, selectedMetrics, theme)}
+            >
+              {metric}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>
-  );
+  )
 }
