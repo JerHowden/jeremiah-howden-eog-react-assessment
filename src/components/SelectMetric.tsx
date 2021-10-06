@@ -4,7 +4,8 @@ import {
   Box, OutlinedInput, InputLabel, MenuItem, FormControl, Select, Chip, CircularProgress,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
-import getMetrics from '../api/getMetrics'
+import { useQuery } from '@apollo/client'
+import { GET_METRICS, ErrorToast } from '../api'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -17,19 +18,20 @@ const MenuProps = {
   },
 }
 
-function getStyles(name: string, personName: readonly string[], theme: Theme) {
+function getStyles(name: string, options: readonly string[], theme: Theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      options.indexOf(name) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
-  };
+  }
 }
 
 export default function SelectMetric() {
   const theme = useTheme()
   const [selectedMetrics, setSelectedMetrics] = useState<string[]>([])
-  const { data, loading } = getMetrics()
+  const { data, loading, error } = useQuery(GET_METRICS)
+  if (error) ErrorToast(error.message)
 
   const handleChange = (event: SelectChangeEvent<typeof selectedMetrics>) => {
     const {
@@ -43,14 +45,14 @@ export default function SelectMetric() {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+        <InputLabel id='select-multiple-metrics-label'>Chip</InputLabel>
         <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
+          labelId='select-multiple-metrics-label'
+          id='select-multiple-metrics'
           multiple
           value={selectedMetrics}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          input={<OutlinedInput id='select-multiple-metrics-input' label='Metrics' />}
           renderValue={() => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selectedMetrics.map(value => (
@@ -60,15 +62,21 @@ export default function SelectMetric() {
           )}
           MenuProps={MenuProps}
         >
-          {loading ? <CircularProgress /> : data.getMetrics.map((metric) => (
-            <MenuItem
-              key={metric}
-              value={metric}
-              style={getStyles(metric, selectedMetrics, theme)}
-            >
-              {metric}
-            </MenuItem>
-          ))}
+          {loading
+            ? (
+              <Box>
+                <CircularProgress />
+              </Box>
+            )
+            : data.getMetrics.map((metric: string) => (
+              <MenuItem
+                key={metric}
+                value={metric}
+                style={getStyles(metric, selectedMetrics, theme)}
+              >
+                {metric}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </Box>
