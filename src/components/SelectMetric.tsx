@@ -4,7 +4,7 @@ import {
   Box, OutlinedInput, InputLabel, MenuItem, FormControl, Select, Chip, CircularProgress,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
-import getMetrics from '../Features/Metrics/getMetrics'
+import getMetrics from '../api/getMetrics'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8

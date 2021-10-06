@@ -1,6 +1,6 @@
 import React from 'react';
 // import Typography from '@mui/material/Typography'
-import getMetrics from '../Features/Metrics/getMetricsLive'
+import getMetrics from '../api/getMetricsLive'
 import SelectMetric from './SelectMetric'
 
 export default () => {
