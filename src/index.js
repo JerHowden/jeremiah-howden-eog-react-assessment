@@ -13,11 +13,11 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import App from './App'
 
 const httpLink = new HttpLink({
-  uri: 'https://react.eogresources.com/graphql',
+  uri: process.env.REACT_APP_API_HTTP,
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://react.eogresources.com/graphql',
+  uri: process.env.REACT_APP_API_WS,
   options: {
     reconnect: true,
   },
