@@ -22,7 +22,17 @@ const theme = createTheme({
 const App = () => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <ToastContainer />
+    <ToastContainer
+      position='bottom-right'
+      autoClose={10000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
     <Main />
   </ThemeProvider>
 )
