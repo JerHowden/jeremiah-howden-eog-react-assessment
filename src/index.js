@@ -9,6 +9,8 @@ import {
 } from '@apollo/client'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { Provider } from 'react-redux'
+import { store } from './app/store'
 
 import App from './App'
 
@@ -42,6 +44,8 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ApolloProvider>, document.getElementById('root'),
 )
