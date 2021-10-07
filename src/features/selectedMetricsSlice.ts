@@ -15,6 +15,7 @@ export const selectedMetricsSlice = createSlice({
   name: 'selectedMetrics',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
+  // jer: honestly really only need a set reducer
   reducers: {
     select: (state, action: PayloadAction<string>) => {
       state.value.push(action.payload)
@@ -27,7 +28,7 @@ export const selectedMetricsSlice = createSlice({
         }
       }
     },
-    selectAll: (state, action: PayloadAction<string[]>) => {
+    selectMultiple: (state, action: PayloadAction<string[]>) => {
       state.value = action.payload
     },
     clear: (state) => {
@@ -37,7 +38,7 @@ export const selectedMetricsSlice = createSlice({
 })
 
 export const {
-  select, deselect, selectAll, clear,
+  select, deselect, selectMultiple, clear,
 } = selectedMetricsSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type

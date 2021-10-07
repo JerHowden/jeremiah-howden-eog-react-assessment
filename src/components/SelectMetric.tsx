@@ -7,6 +7,7 @@ import { SelectChangeEvent } from '@mui/material/Select'
 import { useQuery } from '@apollo/client'
 import { GET_METRICS, ErrorToast } from '../api'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
+import { selectMultiple, clear } from '../features/selectedMetricsSlice'
 // import { select, deselect, selectAll, clear } from '../features/selectedMetricsSlice'
 
 const ITEM_HEIGHT = 48
@@ -38,15 +39,16 @@ export default function SelectMetric() {
   if (error) ErrorToast(error.message)
 
   const handleChange = (event: SelectChangeEvent<typeof selectedMetrics>) => {
-    const {
-      target: { value },
-    } = event
-    console.log(value)
+    if (typeof event.target.value === 'object') dispatch(selectMultiple(event.target.value))
   }
 
   return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl sx={{ m: 1, width: 300 }}>
+    <Box
+      sx={{
+        display: 'flex', p: 1, gap: 1, justifyContent: 'center',
+      }}
+    >
+      <FormControl sx={{ minWidth: '40vw' }}>
         <InputLabel id='select-multiple-metrics-label'>Metrics</InputLabel>
         <Select
           labelId='select-multiple-metrics-label'
@@ -85,13 +87,13 @@ export default function SelectMetric() {
         variant="outlined"
         onClick={() => {
           if (selectedMetrics.length === data?.getMetrics.length) {
-            dispatch({ type: 'clear' })
+            dispatch(clear())
           } else {
-            dispatch({ type: 'selectAll' })
+            dispatch(selectMultiple(data.getMetrics || []))
           }
         }}
       >
-        { selectedMetrics.length === data?.getMetrics.length ? 'Select All' : 'Clear All' }
+        { selectedMetrics.length === data?.getMetrics.length ? 'Clear All' : 'Select All' }
       </Button>
     </Box>
   )
