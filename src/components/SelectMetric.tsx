@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Theme, useTheme } from '@mui/material/styles'
 import {
-  Box, OutlinedInput, InputLabel, MenuItem, FormControl, Select, Chip, CircularProgress,
+  Box, OutlinedInput, InputLabel, MenuItem, FormControl, Select, Chip, CircularProgress, Button,
 } from '@mui/material'
 import { SelectChangeEvent } from '@mui/material/Select'
 import { useQuery } from '@apollo/client'
 import { GET_METRICS, ErrorToast } from '../api'
+import { useAppSelector, useAppDispatch } from '../app/hooks'
+// import { select, deselect, selectAll, clear } from '../features/selectedMetricsSlice'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -28,8 +30,10 @@ function getStyles(name: string, options: readonly string[], theme: Theme) {
 }
 
 export default function SelectMetric() {
+  const selectedMetrics = useAppSelector((state) => state.selectedMetrics.value)
+  const dispatch = useAppDispatch()
+
   const theme = useTheme()
-  const [selectedMetrics, setSelectedMetrics] = useState<string[]>([])
   const { data, loading, error } = useQuery(GET_METRICS)
   if (error) ErrorToast(error.message)
 
@@ -37,15 +41,13 @@ export default function SelectMetric() {
     const {
       target: { value },
     } = event
-    setSelectedMetrics(
-      typeof value === 'string' ? value.split(',') : value,
-    )
+    console.log(value)
   }
 
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id='select-multiple-metrics-label'>Chip</InputLabel>
+        <InputLabel id='select-multiple-metrics-label'>Metrics</InputLabel>
         <Select
           labelId='select-multiple-metrics-label'
           id='select-multiple-metrics'
@@ -68,7 +70,7 @@ export default function SelectMetric() {
                 <CircularProgress />
               </Box>
             )
-            : data.getMetrics.map((metric: string) => (
+            : data?.getMetrics.map((metric: string) => (
               <MenuItem
                 key={metric}
                 value={metric}
@@ -79,6 +81,18 @@ export default function SelectMetric() {
             ))}
         </Select>
       </FormControl>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          if (selectedMetrics.length === data?.getMetrics.length) {
+            dispatch({ type: 'clear' })
+          } else {
+            dispatch({ type: 'selectAll' })
+          }
+        }}
+      >
+        { selectedMetrics.length === data?.getMetrics.length ? 'Select All' : 'Clear All' }
+      </Button>
     </Box>
   )
 }
