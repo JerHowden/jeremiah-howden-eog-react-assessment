@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { selectedMetricsSlice } from '../features/selectedMetricsSlice'
-// ...
+import { liveDataSlice } from '../features/liveDataSlice'
 
 export const store = configureStore({
   reducer: {
     selectedMetrics: selectedMetricsSlice.reducer,
+    liveData: liveDataSlice.reducer,
   },
 })
 
