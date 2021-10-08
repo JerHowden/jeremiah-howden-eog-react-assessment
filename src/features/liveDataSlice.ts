@@ -42,6 +42,9 @@ export const liveDataSlice = createSlice({
       } else {
         state.measurements[action.payload.at] = { [action.payload.metric]: action.payload.value }
       }
+      if (!state.units[action.payload.metric]) {
+        state.units[action.payload.metric] = action.payload.unit
+      }
     },
   },
 })
