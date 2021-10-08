@@ -1,21 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../app/store'
 
-// Define a type for the slice state
 interface SelectedMetricsState {
   value: string[]
 }
 
-// Define the initial state using that type
 const initialState: SelectedMetricsState = {
   value: [],
 }
 
 export const selectedMetricsSlice = createSlice({
   name: 'selectedMetrics',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  // jer: honestly really only need a set reducer
   reducers: {
     select: (state, action: PayloadAction<string>) => {
       state.value.push(action.payload)
