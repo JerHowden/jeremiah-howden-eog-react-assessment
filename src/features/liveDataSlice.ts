@@ -23,12 +23,14 @@ interface Units {
 // Define a type for the slice state
 interface LiveDataState {
   measurements: Measurements,
+  latest: MeasurementsAtTime,
   units: Units,
 }
 
 // Define the initial state using that type
 const initialState: LiveDataState = {
   measurements: {},
+  latest: {},
   units: {},
 }
 
@@ -37,6 +39,7 @@ export const liveDataSlice = createSlice({
   initialState,
   reducers: {
     push: (state, action: PayloadAction<NewMeasurement>) => {
+      state.latest[action.payload.metric] = action.payload.value
       if (state.measurements[action.payload.at]) {
         state.measurements[action.payload.at][action.payload.metric] = action.payload.value
       } else {
