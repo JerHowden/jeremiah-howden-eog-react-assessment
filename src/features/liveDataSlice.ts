@@ -1,43 +1,35 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../app/store'
 
-export interface NewMeasurement {
+interface NewMeasurement {
   metric: 'oilTemp' | 'waterTemp' | 'injValveOpen' | 'flareTemp' | 'tubingPressure' | 'casingPressure',
   at: number,
   value: number,
   unit: string
 }
 
-// Define a type for the slice state
-interface LiveDataState {
-  oilTemp: NewMeasurement[],
-  waterTemp: NewMeasurement[],
-  injValveOpen: NewMeasurement[],
-  flareTemp: NewMeasurement[],
-  tubingPressure: NewMeasurement[],
-  casingPressure: NewMeasurement[],
+interface MeasurementsAtTime {
+  [key: string]: number
 }
 
-// jer: is it better to shape the slice this way to future-proof new metrics by adding dynamically?
-//      or is that too costly performant-wise?
-/*
-  interface LiveDataState2 {
-    metrics: {
-      oilTemp: [],
-      waterTemp: [],
-      etc...
-    }
-  }
-*/
+interface Measurements {
+  [key: string | number]: MeasurementsAtTime
+}
+
+interface Units {
+  [key: string]: string
+}
+
+// Define a type for the slice state
+interface LiveDataState {
+  measurements: Measurements,
+  units: Units,
+}
 
 // Define the initial state using that type
 const initialState: LiveDataState = {
-  oilTemp: [],
-  waterTemp: [],
-  injValveOpen: [],
-  flareTemp: [],
-  tubingPressure: [],
-  casingPressure: [],
+  measurements: {},
+  units: {},
 }
 
 export const liveDataSlice = createSlice({
@@ -45,7 +37,11 @@ export const liveDataSlice = createSlice({
   initialState,
   reducers: {
     push: (state, action: PayloadAction<NewMeasurement>) => {
-      state[action.payload.metric].push(action.payload)
+      if (state.measurements[action.payload.at]) {
+        state.measurements[action.payload.at][action.payload.metric] = action.payload.value
+      } else {
+        state.measurements[action.payload.at] = { [action.payload.metric]: action.payload.value }
+      }
     },
   },
 })
