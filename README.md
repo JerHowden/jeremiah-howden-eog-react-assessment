@@ -13,5 +13,5 @@
 - [x] toast on websocket disconnect or error
 - [x] store selected metrics in redux
 - [x] store subscription data in redux
-- [ ] display data with recharts
-- [ ] styling
+- [x] display data with recharts
+- [x] styling
