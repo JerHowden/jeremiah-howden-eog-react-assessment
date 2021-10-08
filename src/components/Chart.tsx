@@ -2,13 +2,15 @@ import React from 'react'
 import {
   CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts'
-import { useAppSelector } from '../app/hooks'
+import { useAppSelector, useAppDispatch } from '../app/hooks'
+import { deselect } from '../features/selectedMetricsSlice'
 
 interface ColorTypes {
   [key: string]: string
 }
 
 export default function Chart() {
+  const dispatch = useAppDispatch()
   const liveData = useAppSelector(state => state.liveData)
   const selectedMetrics = useAppSelector(state => state.selectedMetrics.value)
   const colors: ColorTypes = {
@@ -38,7 +40,7 @@ export default function Chart() {
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey='at'
-            minTickGap={10}
+            minTickGap={40}
             tickFormatter={(value) => {
               const date = new Date(value)
               return `${date.toLocaleTimeString()}`
@@ -69,26 +71,28 @@ export default function Chart() {
               let { payload } = props
               if (!payload) payload = []
               return (
-                <ul
+                <div
                   style={{
-                    display: 'flex', justifyContent: 'center', listStyle: 'none', gap: 16,
+                    display: 'flex', justifyContent: 'center', gap: 16,
                   }}
                 >
                   {
                     payload.map((entry) => (
-                      <li
-                        key={`item-${entry.value}`}
-                        title={entry.value}
+                      <button
+                        key={`metric-${entry.value}`}
+                        type='button'
+                        title={`Deselect ${entry.value}`}
                         style={{
-                          color: 'white', fontSize: '1.5em', padding: 10, backgroundColor: entry.color, borderRadius: 4,
+                          color: 'white', fontSize: '1.5em', padding: 10, backgroundColor: entry.color, borderRadius: 4, border: 'none', cursor: 'pointer',
                         }}
+                        onClick={() => dispatch(deselect(entry.value))}
                       >
                         <span>{liveData.latest[entry.value].toFixed(2)}</span>
                         <span style={{ fontSize: '0.8em', fontWeight: 300, marginLeft: 2 }}>{liveData.units[entry.value]}</span>
-                      </li>
+                      </button>
                     ))
                   }
-                </ul>
+                </div>
               )
             }}
           />
