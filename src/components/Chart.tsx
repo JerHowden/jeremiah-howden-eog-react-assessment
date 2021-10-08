@@ -83,7 +83,8 @@ export default function Chart() {
                           color: 'white', fontSize: '1.5em', padding: 10, backgroundColor: entry.color, borderRadius: 4,
                         }}
                       >
-                        {liveData.latest[entry.value].toFixed(2)}
+                        <span>{liveData.latest[entry.value].toFixed(2)}</span>
+                        <span style={{ fontSize: '0.8em', fontWeight: 300, marginLeft: 2 }}>{liveData.units[entry.value]}</span>
                       </li>
                     ))
                   }
