@@ -84,7 +84,8 @@ export default function SelectMetric() {
         </Select>
       </FormControl>
       <Button
-        variant="outlined"
+        variant={selectedMetrics.length === data?.getMetrics.length ? 'contained' : 'outlined'}
+        style={{ boxShadow: 'none' }}
         onClick={() => {
           if (selectedMetrics.length === data?.getMetrics.length) {
             dispatch(clear())
