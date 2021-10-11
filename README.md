@@ -15,3 +15,4 @@
 - [x] store subscription data in redux
 - [x] display data with recharts
 - [x] styling
+- [x] env file
